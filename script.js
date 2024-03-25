@@ -1,3 +1,5 @@
+let slideNumber = 0;
+let slideTime = 25000;
 
 const sliderInner = document.querySelector("#slider");
 const imagens = [
@@ -5,21 +7,16 @@ const imagens = [
   "https://scontent-gru1-1.xx.fbcdn.net/v/t39.30808-6/407264557_751216543708351_1104381337168923056_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=5f2048&_nc_ohc=zhfbetE9K18AX-IUh-7&_nc_ht=scontent-gru1-1.xx&oh=00_AfCdUTlAlAP1g66GMdSv8Bbvbmo9xtj358dMXP68S10FIg&oe=660375EC"
 ]
 const midias = [{
-  url: 'https://www.youtube-nocookie.com/embed/cW9_0OoG6_4?si=IV6wPU72hZLZEn5h',
+  url: 'https://www.youtube-nocookie.com/embed/YnS8piVVXjw?si=iydStDHkCuuc76ap',
   tipo: 'youtube'
-},
-{
-  url: 'https://www.youtube-nocookie.com/embed/NBxVtGficvs?si=WbQz4LvZdquuPyyZ',
-  tipo: 'youtube'
-},];
+}];
 
 imagens.forEach(imagem => midias.push({ url: imagem, tipo: 'imagem' }));
 
-let slideNumber = 0;
 
 function youtubeSlide(url) {
   const videoURL = url;
-  const mountVideoFrame = `<iframe src="${videoURL}&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`
+  const mountVideoFrame = `<iframe src="${videoURL}&autoplay=1&mute=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`
 
   return mountVideoFrame;
 }
@@ -39,17 +36,23 @@ function changeSlide(slideNumber) {
   }
 
   sliderInner.innerHTML = mountSlide;
+  console.log(slideNumber, midias.length - 1, slideNumber == midias.length - 1);
+  if (slideNumber == midias.length - 1) {
+    slideNumber = 0;
+    setTimeout(slideShow, slideTime);
+  }
+}
+
+function slideShow() {
+  for (let i = 0, time = 0; i < midias.length; i++, time += slideTime) {
+    setTimeout(changeSlide, time, i);
+    console.log(i, time)
+    console.log(document.querySelector("iframe"));
+  }
 }
 
 function initSlide() {
-  /*midias.forEach(item => {
-    console.log(item);
-  })*/
-  for (let i = 0, time = 0; i < midias.length; i++, time += 10000) {
-    setTimeout(changeSlide, time, i);
-    console.log(i, time)
-  }
-
+  slideShow();
 }
 
 initSlide()
